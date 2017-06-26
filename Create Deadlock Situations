@@ -1,35 +1,48 @@
+thread1.start();
+thread2.start();
 
-
-class SyncThread implements Runnable{
-    private Object obj1;
-    private Object obj2;
-
-    public SyncThread(Object o1, Object o2){
-        this.obj1=o1;
-        this.obj2=o2;
-    }
-    @Override
-    public void run() {
-        String name = Thread.currentThread().getName();
-        System.out.println(name + " acquiring lock on "+obj1);
-        synchronized (obj1) {
-         System.out.println(name + " acquired lock on "+obj1);
-         work();
-         System.out.println(name + " acquiring lock on "+obj2);
-         synchronized (obj2) {
-            System.out.println(name + " acquired lock on "+obj2);
-            work();
-        }
-         System.out.println(name + " released lock on "+obj2);
-        }
-        System.out.println(name + " released lock on "+obj1);
-        System.out.println(name + " finished execution.");
-    }
-    private void work() {
-        try {
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//Code called by Thread-1 
+public void run() {
+    synchronized(String.class) {  //Step 1.  Thread-1 acquires lock on String.class and then calls sleep() method 
+        Thread.sleep(100);  //Step 2. Thread-1 calls sleep() method 
+        synchronized(Object.class) {  //Step 5a. Thread-1 is waiting for Thread-2 to release lock on Object.class
         }
     }
 }
+
+//Code called by Thread-2
+public void run() {
+    synchronized(Object.class) {  //Step 3. Thread-2 acquires lock on Object.class
+        Thread.sleep(100);  //Step 4. Thread-2 calls sleep() method
+        synchronized(String.class) { //Step 5b. is waiting for Thread-1 to release lock on String.class
+        }
+    }
+}
+
+Problem:
+Thread-1 acquires lock on String.class and then calls sleep() method which gives Thread-2 the chance to execute immediately after Thread-1 has acquired lock on String.class and Thread-2 acquires lock on Object.class then calls sleep() method and now it waits for Thread-1 to release lock on String.class.
+Conclusion:
+Now, Thread-1 is waiting for Thread-2 to release lock on Object.class and Thread-2 is waiting for Thread-1 to release lock on String.class and deadlock is formed.
+
+
+Solution:
+
+//Code called by Thread-1
+publicvoid run() {
+    synchronized(String.class) {
+        Thread.sleep(100);
+        synchronized(Object.class) {
+        }
+    }
+}
+
+//Code called by Thread-2
+public void run() {
+    synchronized(String.class) {
+        Thread.sleep(100);
+        synchronized(Object.class) {
+        }
+    }
+}
+
+Thread-1 acquires lock on String.class and then calls sleep() method which gives Thread-2 the chance to execute immediately after Thread-1 has acquired lock on String.class and Thread-2 tries to acquire lock on String.class but lock is holded by Thread-1. Meanwhile, Thread-1 completes successfully. As Thread-1 has completed successfully it releases lock on String.class, Thread-2 can now acquire lock on String.class and complete successfully without any deadlock formation.
