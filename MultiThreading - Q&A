@@ -1,0 +1,112 @@
+Q. wait() vs	sleep()
+
+The wait() method is defined in Object class.	
+The sleep() method is defined in Thread class.
+
+The wait() method releases the lock.	
+The sleep() method doesn't releases the lock.
+
+Q. If you make any static method as synchronized, the lock will be on the class not on object. 
+ synchronized static void printTable(int n){  
+   for(int i=1;i<=10;i++){  
+     System.out.println(n*i);  
+     try{  
+       Thread.sleep(400);  
+     }catch(Exception e){}  
+   }  
+ }  
+}  
+
+Q. What is deadlock?
+Deadlock is a situation when two threads are waiting on each other to release a resource. Each thread waiting for a resource which is held by the other waiting thread.
+
+Q. What is Thread in java?
+Threads consumes CPU in best possible manner, hence enables multi processing. Multi threading reduces idle time of CPU which improves performance of application.
+Thread are light weight process.
+A thread class belongs to java.lang package.
+We can create multiple threads in java, even if we don’t create any Thread, one Thread at least  do exist i.e. main thread.
+Multiple threads run parallely in java.  
+Threads have their own stack.
+Advantage of Thread : Suppose one thread needs 10 minutes to get certain task, 10 threads used at a time could complete that task in 1 minute, because threads can run parallely.
+
+Q. How to implement Threads in java?
+This is very basic threading question. Threads can be created in two ways i.e. by implementing java.lang.Runnable interface or extending java.lang.Thread class and then extending run method.
+
+Does Thread implements their own Stack, if yes how? (Important)
+Yes, Threads have their own stack. 
+http://www.javamadesoeasy.com/2015/03/threads-implement-their-own-stack.html
+
+Q. What is difference between starting thread with run() and start() method?
+This is quite interesting question, it might confuse you a bit and at time may make you think is there really any difference between starting thread with run() and start() method.
+When you call start() method, main thread internally calls run() method to start newly created Thread, so run() method is ultimately called by newly created thread.
+When you call run() method main thread rather than starting run() method with newly thread it start run() method by itself.
+
+Q. What is significance of using Volatile keyword?
+Java allows threads to access shared variables. As a rule, to ensure that shared variables are consistently updated, a thread should ensure that it has exclusive use of such variables by obtaining a lock that enforces mutual exclusion for those shared variables.
+
+Q. Race conditions in multithreading
+Good read: http://www.javamadesoeasy.com/2015/03/race-condition-in-multithreading-and.html
+
+Q. Why wait(), notify()  and notifyAll() are in Object class and not in Thread class?
+Every Object has a monitor, acquiring that monitors allow thread to hold lock on object. But Thread class does not have any monitors.
+wait(), notify() and notifyAll()are called on objects only >When wait() method is called on object by thread it waits for another thread on that object to release object monitor by calling notify() or notifyAll() method on that object.
+
+q.Is it important to acquire object lock before calling wait(), notify() and notifyAll()?
+Yes, it’s mandatory to acquire object lock before calling these methods on object. As discussed above wait(), notify()  and notifyAll() methods are always called from Synchronized block only, and as soon as thread enters synchronized block it acquires object lock (by holding object monitor). If we call these methods without acquiring object lock i.e. from outside synchronize block then java.lang. IllegalMonitorStateException is thrown at runtime.
+
+Q. What is life cycle of Thread, explain thread states? 
+https://lh6.googleusercontent.com/7jeKUlh2g92iKsBg1K9TKUrkuhNWVn-Rb4yUI1Ey82Varf7_egXGDh9WyABRMhPuAhfA8wJ_Zz1uPuurm2LmzbrZLgLNArUf2vXgVvTP5v5GrZ2Dq1PNv1W7xZGL3YLPqebjXgU
+
+https://dzone.com/articles/threads-top-80-interview
+
+Q. Thread State
+NEW: A thread that has not yet started is in this state.
+RUNNABLE: A thread executing in the Java virtual machine is in this state.
+BLOCKED: A thread that is blocked waiting for a monitor lock is in this state.
+WAITING: A thread that is waiting indefinitely for another thread to perform a particular action is in this state.
+TIMED_WAITING: A thread that is waiting for another thread to perform an action for up to a specified waiting time is in this state.
+TERMINATED: A thread that has exited is in this state.
+
+Q. For what purposes is the keyword synchronized used?
+When you have to implement exclusive access to a resource, like some static value or some file reference, the code that works with the exclusive resource can be embraced with a synchronized block:
+
+synchronized (SynchronizedCounter.class) {
+    counter++;
+}
+
+Q. What intrinsic lock does a synchronized method acquire?
+A synchronized method acquires the intrinsic lock for that method’s object and releases it when the method returns. Even if the method throws an exception, the intrinsic lock is released. Hence a synchronized method is equal to the following code:
+view sourceprint?
+
+public void method() {
+    synchronized(this) {
+        ...
+    }
+}
+
+https://www.javacodegeeks.com/2014/11/multithreading-concurrency-interview-questions-answers.html
+
+> Good Read
+https://www.java-success.com/java-beginner-multithreading-interview-questions-and-answers/
+
+Q. What does re-entrancy mean regarding intrinsic or explicit locks?
+A10. Re-entrancy means that locks are acquired on a per-thread rather than per-invocation basis. In Java, both intrinsic and explicit locks are re-entrant.
+
+public synchronized void method1(){
+  //intrinsic lock is acquired
+  operation1(); //ok to enter this synchronized method 
+                //as locks are on per thread basis
+
+  operation2(); //ok to enter this synchronized method 
+                //as locks are on per thread basis 
+  //intrinsic lock is released  
+}
+
+public synchronized void operation1(){
+    //process 1
+}
+
+public synchronized void operation2(){
+    //process 1
+}
+
