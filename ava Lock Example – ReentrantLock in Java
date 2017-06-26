@@ -1,0 +1,27 @@
+public class Resource {
+
+	public void doSomething(){
+		//do some operation, DB read, write etc
+	}
+	
+	public void doLogging(){
+		//logging, no need for thread safety
+	}
+}
+
+public class SynchronizedLockExample implements Runnable{
+
+	private Resource resource;
+	
+	public SynchronizedLockExample(Resource r){
+		this.resource = r;
+	}
+	
+	@Override
+	public void run() {
+		synchronized (resource) {
+			resource.doSomething();
+		}
+		resource.doLogging();
+	}
+}
