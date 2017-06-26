@@ -1,0 +1,48 @@
+//Two visitors try to withdraw cash at same time
+
+class CashWithdraw implements Runnable {  
+    int cashAvailable = 1;    
+    public void run() {                  
+        System.out.println("Waiting to withdraw Cash for : " + Thread.currentThread().getName());         
+        synchronized(this) {
+                if (cashAvailable > 0) {                
+                    System.out.println("Withdrawing Cash for : " + Thread.currentThread().getName());                                 
+                    //For example the system takes 1 seconds in cash withdrawl                               
+                    try {                      
+                        Thread.sleep(1000);                
+                    } catch (Exception e) {}                                 
+                    cashAvailable--;                
+                    System.out.println("Cash withdrawal for : " + Thread.currentThread().getName());                
+                    System.out.println("Currently cashAvailable = " + cashAvailable);         
+                }         
+                else {                
+                    System.out.println("Cash NOT WITHDRWAL for : " + Thread.currentThread().getName());         
+                }                  
+            } //End synchronization block
+              
+    }  
+}
+
+public class MyClass {  
+	public static void main(String args[]) {         
+		CashWithdraw obj = new CashWithdraw();           
+
+		Thread thread1 = new Thread(obj, "Visitor1 Thread");         
+		Thread thread2 = new Thread(obj, "Visitor2 Thread");                  
+
+		thread1.start();         
+		thread2.start();  
+	}
+}
+    /*OUTPUT
+     
+    Waiting to withdraw Cash for : Visitor1 Thread
+    Waiting to withdraw Cash for : Visitor2 Thread
+    Withdraw Cash for : Visitor1 Thread
+    Withdraw Cash for : Visitor2 Thread
+    Cash WITHDRWAL for : Visitor1 Thread
+    currently CashAvailable = 0
+    Cash WITHDRWAL for : Visitor2 Thread
+    currently CashsAvailable = -1
+     
+    */
