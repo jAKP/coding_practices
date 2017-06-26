@@ -1,3 +1,8 @@
+A deadlock is a situation in which two (or more) threads are each waiting on the other thread to free a resource that it has locked, while the thread itself has locked a resource the other thread is waiting on:
+Thread 1: locks resource A, waits for resource B
+Thread 2: locks resource B, waits for resource A
+
+
 thread1.start();
 thread2.start();
 
