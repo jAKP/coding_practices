@@ -41,4 +41,6 @@ The proxy (simple) class represents functionality of another (complex) class and
 
 The Client class doesn't access the subsystem classes directly. Instead, the Client works through a Facade class that implements a simple interface in terms of (by delegating to) the subsystem classes (Class1, Class2, and Class3). The Client depends only on the simple Facade interface and is independent of the complex subsystem.
 The sequence diagram shows the run-time interactions: The Client object works through a Facade object that delegates the request to the Class1, Class2, and Class3 instances that perform the request.
-![alt text](https://en.wikipedia.org/wiki/Facade_pattern#/media/File:W3sDesign_Facade_Design_Pattern_UML.jpg)
+![alt text](https://github.com/jAKP/coding_practices/blob/master/W3sDesign_Facade_Design_Pattern_UML.jpg)
+![alt text](https://github.com/jAKP/coding_practices/blob/master/Example_of_Facade_design_pattern_in_UML.png)
+
