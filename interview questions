@@ -1,0 +1,146 @@
+1. What happens when google.com is entered.
+- local history is checked for autocomplete
+- request goes to the ISP (Internet Service Provider) for DNS Lookup (Domain Name Service) IP addresses for the hostname.
+- if not found with ISP, request goes to the Alternative DNS (Tier 2), if not found to Tier 1 and then to the server itself.
+- IP addresses are returned to the client via ISP
+- TCP connection is made and packets are sent and received.
+- HTTP request (serialized) is sent over the network. 
+
+2. How does heap work
+3. How does a Map work.
+- HashMap works on the principal of hashing.
+- Map.Entry interface - This interface gives a map entry (key-value pair). HashMap in Java stores both key and value object, in bucket, as an object of Entry class
+    which implements this nested interface Map.Entry
+- hashCode() - HashMap provides put(key, value) for storing and get(key) method for retrieving Values from HashMap. 
+    When put() method is used to store (Key, Value) pair, HashMap implementation calls hashcode on Key object to calculate a hash that is used to 
+    find a bucket where Entry object will be stored. When get() method is used to retrieve value, again key object is used to calculate a hash 
+    which is used then to find a bucket where that particular key is stored.
+- equals() - equals() method is used to compare objects for equality. In case of HashMap key object is used for comparison, also using equals() method Map knows 
+    how to handle hashing collision (hashing collision means more than one key having the same hash value), thus assigned to the same bucket. 
+    In that case objects are stored in a linked list, refer figure for more clarity. 
+Where hashCode method helps in finding the bucket where that key is stored, 
+equals method helps in finding the right key as there may be more than one key-value pair stored in a single bucket.
+
+Each key in a HashMap must be unique. When "adding a duplicate key" the old value (for the same key, as keys must be unique) is simply replaced.
+
+HashMap "class makes no guarantees as to the order of the map; in particular, it does not guarantee that the order will remain constant over time.
+
+4. Can two hascode and equals
+5. What are immutable objects
+- Objects whose value can not be changed.
+- Immutable means that once the constructor for an object has completed execution that instance can't be altered.
+You can pass references to the object around, without worrying that someone else is going to change its contents.
+Especially when dealing with concurrency, there are no locking issues with objects that never change.
+- Declare variables of the object as final.
+- In most cases, you want an immutable string. But if you need to do a lot of appending and inserting into a string, you need the mutability for speed. 
+If you want the concurrency safety and garbage collection benefits with it the key is to keep your mutable objects local to a method.
+
+5. synchornized - when to use (block/method)
+
+6. final keyword.
+- final class: the class can not be extended
+- final method: method can not be overridded
+- final variable: varibale value can not changed
+
+7. Java: arguments are always passed by value.
+8. Garbage collection. How does it work.
+- any weak references are released from the memory.
+Car a = new Car(); a reachable
+Car b = new Car(); b reachable
+a = new Car(); a(old) unreachable. a(new) reachable
+a = b; a reachable, b unreachable
+a = null; b = null; a, b unreachable 
+
+9. HTTP Header components
+Request fields:
+- Accept: Content-Types that are acceptable for the response
+- Authentication: Authentication credentials for HTTP authentication.
+- Cookie
+- Content-Type: The MIME type of the body of the request (used with POST and PUT requests).
+
+Response fields: 
+- Status: 200 OK
+- X-Frame-Options: clickjacking attacks. deny/same-origin
+- X-Content-Type-Options: no sniff. MIME-sniffing a response away from the declared content-type
+
+10. REST (GET, POST, PUT, DELETE), SOAP requests are always HTTP POST
+
+11. Known design patterns with where used.
+https://github.com/jAKP/coding_practices/blob/master/Used%20Design%20Patterns
+
+12. Design patterns in JDK
+https://stackoverflow.com/questions/1673841/examples-of-gof-design-patterns-in-javas-core-libraries
+
+13. Unchecked exceptions: 
+
+http://www.geeksforgeeks.org/checked-vs-unchecked-exceptions-in-java/
+
+                   +-----------+
+		           | Throwable |
+                   +-----------+
+                    /         \
+		           /           \
+          +-------+          +-----------+
+          | Error |          | Exception |
+          +-------+          +-----------+
+	       /  |  \           / |        \
+         \________/	       \______/    	 \
+			                           +------------------+
+          unchecked	        checked	   | RuntimeException |
+					                   +------------------+
+					                    /   |    |      \
+					                   \_________________/
+					   
+					                        unchecked
+14. FileInputStream vs FileReader
+Sub-classes of Reader and Writer (i.e. FileReader and FileWriter) both are for reading/writing text content. 
+InputStream / OutputStream are for binary content. If you take a look at the documentation:
+- Reader: Abstract class for reading character streams
+- InputStream: Abstract class is the superclass of all classes representing an input stream of bytes.
+
+15. Abstract vs interface
+- Methods of a Java interface are implicitly abstract and cannot have implementations. A Java abstract class can have instance methods that implements a default behaviour.
+- Variables declared in a Java interface are by default final. An abstract class may contain non-final variables.
+- As of Java8 interfaces can contain methods.
+- Members of a Java interface are public by default. A Java abstract class can have the usual flavours of class members like private, protected, etc.
+- A Java interface should be implemented using keyword “implements”; A Java abstract class should be extended using keyword “extends”.
+- An interface can extend another Java interface only, an abstract class can extend another Java class and implement multiple Java interfaces.
+- A Java class can implement multiple interfaces but it can extend only one abstract class.
+
+16. Can I override and overload static method in Java.
+Static methods can not be overridden because there is nothing to override, as they would be two different methods. One static method instance per class.
+Static methods can be overloaded just like any other method.
+
+static class Class1 {
+    public static int Method1(){
+          return 0;
+    }
+}
+static class Class2 extends Class1 {
+    public static int Method1(){
+          return 1;
+    }
+
+}
+public static class Main {
+    public static void main(String[] args){
+          //Must explicitly chose Method1 from Class1 or Class2
+          Class1.Method1();
+          Class2.Method1();
+    }
+}
+
+17. HashSet vs HashMap
+They are entirely different constructs. A HashMap is an implementation of Map. A Map maps keys to values. The key look up occurs using the hash.
+On the other hand, a HashSet is an implementation of Set. A Set is designed to match the mathematical model of a set. A HashSet does use a HashMap to back its implementation, as you noted. 
+
+HashSet is a set, e.g. {1,2,3,4,5}
+HashMap is a key -> value (key to value) map, e.g. {a -> 1, b -> 2, c -> 2, d -> 1}
+Notice in my example above that in the HashMap there must not be duplicate keys, but it may have duplicate values.
+In the HashSet, there must be no duplicate elements
+
+18. Static vs Dynamic binding
+1) Static binding in Java occurs during Compile time while Dynamic binding occurs during Runtime.
+2) private, final and static methods and variables uses static binding and bonded by compiler while virtual methods are bonded during runtime based upon runtime object.
+3) Static binding uses Type(Class in Java) information for binding while Dynamic binding uses Object to resolve binding.
+3) Overloaded methods are bonded using static binding while overridden methods are bonded using dynamic binding at runtime.
